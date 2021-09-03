@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// Attribute to contain the data.
+/// </summary>
 public class ListToPopupAttribute : PropertyAttribute
 {
     public Type myType;
@@ -16,20 +19,26 @@ public class ListToPopupAttribute : PropertyAttribute
     }
 }
 
+#if UNITY_EDITOR
+/// <summary>
+/// Drawer to draw the list of the strings in the inspector.
+/// </summary>
 [CustomPropertyDrawer(typeof(ListToPopupAttribute))]
 public class ListToPopupDrawer : PropertyDrawer
 {
-#if UNITY_EDITOR
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         ListToPopupAttribute popupAttribute = attribute as ListToPopupAttribute;
         List<string> propertiesList = null;
 
-        if (popupAttribute.myType.GetField(popupAttribute.propertyName) != null)
-        {
-            propertiesList = popupAttribute.myType.GetField(popupAttribute.propertyName).GetValue(popupAttribute.myType) as List<string>;
-        }
+        // Try to get the data from the list
+        var fieldInfo = popupAttribute.myType.GetField(popupAttribute.propertyName);
 
+
+        if (fieldInfo != null)
+            propertiesList = fieldInfo.GetValue(property.serializedObject.targetObject) as List<string>;
+
+        // Draw a dropdown box in the inspector and fill it with the data in the list
         if (propertiesList != null && propertiesList.Count > 0)
         {
             int selectedIndex = Mathf.Max(propertiesList.IndexOf(property.stringValue), 0);
@@ -38,8 +47,8 @@ public class ListToPopupDrawer : PropertyDrawer
         }
         else
         {
-            EditorGUI.LabelField(position, label);
+            EditorGUI.LabelField(position, "No data avaible");
         }
     }
-#endif
 }
+#endif
