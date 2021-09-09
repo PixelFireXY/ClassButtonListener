@@ -1,4 +1,4 @@
-# <h1>EnumListBehaviour</h1>
-<p>Use a scriptable object to store a list of strings and convert it to an enum in the Unity inspector.</p>
+# <h1>ClassButtonListener</h1>
+<p>Use this class to have a dropdown list in the inspector of the public methods of a specific class.</p>
 
-<p>To use it just attach EnumListBehaviour.cs to a gameobject, and create in your asset folder a new ScriptableObject by right click => Create/Enum list/New enum list.</p>
+<p>Like this, instead of use the button unity event you can find all references via code.</p>
